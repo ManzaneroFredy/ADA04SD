@@ -33,20 +33,24 @@ public class ShapeListImpl extends UnicastRemoteObject implements ShapeList{
 
     @Override
     public int deleteShape(int version) throws RemoteException {
-        int indexShapeToDelete = 0;
-        for(Object shape : this.theList){
-           Shape actualShape = (Shape) shape;
-           if(actualShape.getVersion() != version){
-               indexShapeToDelete++;
-               continue;
-           }
-           break;
+        if (!this.theList.isEmpty()) {
+            int indexShapeToDelete = 0;
+            for (Object shape : this.theList) {
+                Shape actualShape = (Shape) shape;
+                if (actualShape.getVersion() != version) {
+                    indexShapeToDelete++;
+                    continue;
+                }
+                break;
+            }
+
+            if (indexShapeToDelete + 1 != this.theList.size()) {
+                this.theList.remove(indexShapeToDelete);
+                return version;
+            }
+            return 0;
+        }else{
+            return 0;
         }
-        
-        if(indexShapeToDelete + 1 != this.theList.size()){
-            this.theList.remove(indexShapeToDelete);
-            return version;
-        }
-        return 0;
     }
 }
